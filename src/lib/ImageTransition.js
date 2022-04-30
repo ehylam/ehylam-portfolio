@@ -1,3 +1,5 @@
+// import fragmentShader from '/shaders/fragmentShader.glsl?raw';
+// import vertexShader from '/shaders/vertexShader.glsl?raw';
 import gsap from 'gsap';
 import * as THREE from 'three';
 
