@@ -3,6 +3,13 @@
 import gsap from 'gsap';
 import * as THREE from 'three';
 
+// Possible optimizations?:
+// Move the camera instead of the meshes.
+// only update the meshes that are in view.
+
+// TODO:
+// Ensure that the meshes are positioned correctly when resized.
+
 const noise = `
 float N21(vec2 p) {
   return fract(sin(p.x * 110. + p.y * 5834.) * 43758.);
@@ -145,22 +152,7 @@ export default class ImageTransition {
     };
     this.currentItem = -1;
     this.animating = false;
-    this.x = {
-      start: 0,
-      current: 0,
-      target: 0,
-      distance: 0,
-      end: 0,
-      lerp: 0.1
-    };
-    this.y = {
-      start: 0,
-      current: 0,
-      target: 0,
-      distance: 0,
-      end: 0,
-      lerp: 0.1
-    };
+
     this.scroll = {
       x: 0,
       y: 0
@@ -185,20 +177,14 @@ export default class ImageTransition {
     this.updateImages();
     this.mouseMovement();
     this.render();
+    this.setPosition();
     this.eventListeners();
 
   }
 
   eventListeners() {
     window.addEventListener('resize', this.resize.bind(this));
-
-    window.addEventListener('mousedown', this.onTouchDown.bind(this));
-    window.addEventListener('mousemove', this.onTouchMove.bind(this));
-    window.addEventListener('mouseup', this.onTouchUp.bind(this));
-
-    window.addEventListener('touchstart', this.onTouchDown.bind(this));
-    window.addEventListener('touchmove', this.onTouchMove.bind(this));
-    window.addEventListener('touchend', this.onTouchUp.bind(this));
+    window.addEventListener('scroll', this.updateCameraPosition.bind(this));
 
     this.imageArr.forEach((obj, i) => {
       obj.img.addEventListener("mousedown", () => this.meshClick(obj));
@@ -282,12 +268,17 @@ export default class ImageTransition {
     });
   }
 
-  setPosition(x = 0, y = 0) {
+  setPosition() {
     this.imageArr.forEach(img => {
       const bb = this.images[img.id].getBoundingClientRect();
-      img.mesh.position.x = (bb.left + x - window.innerWidth / 2) + (bb.width / 2);
-      img.mesh.position.y = (-bb.top + y + window.innerHeight / 2) - (bb.height / 2);
+      img.mesh.position.x = (bb.left - window.innerWidth / 2) + (bb.width / 2);
+      img.mesh.position.y = (-bb.top + window.innerHeight / 2) - (bb.height / 2);
     });
+  }
+
+  updateCameraPosition() {
+    this.camera.position.y = -window.scrollY;
+    this.camera.updateProjectionMatrix();
   }
 
   mouseMovement() {
@@ -421,66 +412,26 @@ export default class ImageTransition {
 
   resize() {
     this.updateImages();
+    this.setPosition();
     this.updateFullscreen(this.currentItem);
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.fov = 2 * Math.atan((window.innerHeight / 2) / this.cameraPos ) * (180 / Math.PI);
-    this.camera.updateProjectionMatrix();
+    // this.camera.updateProjectionMatrix();
+    this.updateCameraPosition();
 
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  }
 
-  onTouchDown(event) {
-    if(!this.animating) {
-      this.isDown = true;
-      this.x.start = event.touches ? event.touches[0].clientX : event.clientX;
-      this.y.start = event.touches ? event.touches[0].clientY : event.clientY;
-    }
-  }
-
-  onTouchMove(event) {
-    if(!this.animating && this.isDown) return;
-
-    const x = event.touches ? event.touches[0].clientX : event.clientX;
-    const y = event.touches ? event.touches[0].clientY : event.clientY;
-
-    this.x.current = x;
-    this.y.current = y;
-
-    this.x.distance = this.x.start - this.x.current;
-    this.y.distance = this.y.start - this.y.current;
-
-    this.x.target = this.x.current - this.x.distance;
-    this.y.target = this.y.current - this.y.distance;
 
   }
 
-  onTouchUp(event) {
-    if(!this.animating) {
-      this.isDown = false;
-      const x = event.touches ? event.touches[0].clientX : event.clientX;
-      const y = event.touches ? event.touches[0].clientY : event.clientY;
-
-      this.x.end = x;
-      this.y.end = y;
-
-      this.x.distance = this.x.start - this.x.end;
-      this.y.distance = this.y.start - this.y.end;
-    }
-  }
 
   render() {
     this.elapsedTime = this.clock.getElapsedTime();
 
-    this.x.current = gsap.utils.interpolate(this.x.current, this.x.distance, this.x.lerp);
-    this.y.current = gsap.utils.interpolate(this.y.current, this.y.distance, this.y.lerp);
-
-    this.scroll.x = this.x.current;
-    this.scroll.y = this.y.current;
-
     this.renderer.render(this.scene, this.camera);
 
-    this.setPosition();
+    // this.setPosition();
 
     this.materials.forEach( m => {
         m.uniforms.uTime.value = this.elapsedTime;
