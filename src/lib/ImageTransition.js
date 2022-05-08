@@ -4,11 +4,10 @@ import gsap from 'gsap';
 import * as THREE from 'three';
 
 // Possible optimizations?:
-// Move the camera instead of the meshes.
 // only update the meshes that are in view.
 
 // TODO:
-// Ensure that the meshes are positioned correctly when resized.
+// Fix weird resizing lag issue where the rendered image isn't updating it's width and height
 
 const noise = `
 float N21(vec2 p) {
@@ -272,12 +271,13 @@ export default class ImageTransition {
     this.imageArr.forEach(img => {
       const bb = this.images[img.id].getBoundingClientRect();
       img.mesh.position.x = (bb.left - window.innerWidth / 2) + (bb.width / 2);
-      img.mesh.position.y = (-bb.top + window.innerHeight / 2) - (bb.height / 2);
+      img.mesh.position.y = (-bb.top + window.innerHeight / 2) - (bb.height / 2) + this.scroll.y;
     });
   }
 
   updateCameraPosition() {
-    this.camera.position.y = -window.scrollY;
+    this.scroll.y = -window.scrollY;
+    this.camera.position.y = this.scroll.y;
     this.camera.updateProjectionMatrix();
   }
 
@@ -322,10 +322,15 @@ export default class ImageTransition {
 		this.materials[id].uniforms.uMeshPosition.value.y = y / heightViewUnit;
 		this.materials[id].uniforms.uMeshScale.value.x = (rect.width * viewSize.width) / window.innerWidth;
 		this.materials[id].uniforms.uMeshScale.value.y = (rect.height * viewSize.height) / window.innerHeight;
-    this.materials[id].uniforms.uViewSize.value.x = (rect.width / rect.height) * this.getViewSize().height;
-    this.materials[id].uniforms.uViewSize.value.y = this.getViewSize().height;
-    // this.materials[id].uniforms.uViewSize.value.x = this.getViewSize().width;
-    // this.materials[id].uniforms.uViewSize.value.y = this.getViewSize().width / (rect.width / rect.height);
+
+    if((rect.width / rect.height) * viewSize.height > window.innerWidth) {
+      this.materials[id].uniforms.uViewSize.value.x = viewSize.width;
+      this.materials[id].uniforms.uViewSize.value.y = viewSize.width / (rect.width / rect.height);
+    } else {
+      this.materials[id].uniforms.uViewSize.value.x = (rect.width / rect.height) * viewSize.height;
+      this.materials[id].uniforms.uViewSize.value.y = viewSize.height;
+    }
+
 
     this.currentItem = {img, id};
 
@@ -355,10 +360,14 @@ export default class ImageTransition {
 
     this.materials[id].uniforms.uMeshScale.value.x = widthViewUnit;
     this.materials[id].uniforms.uMeshScale.value.y = heightViewUnit;
-    // this.materials[id].uniforms.uViewSize.value.x = this.getViewSize().width;
-    // this.materials[id].uniforms.uViewSize.value.y = this.getViewSize().width / (rect.width / rect.height);
-    this.materials[id].uniforms.uViewSize.value.x = (rect.width / rect.height) * this.getViewSize().height - 50;
-    this.materials[id].uniforms.uViewSize.value.y = this.getViewSize().height - 50;
+
+    if((rect.width / rect.height) * viewSize.height > window.innerWidth) {
+      this.materials[id].uniforms.uViewSize.value.x = viewSize.width;
+      this.materials[id].uniforms.uViewSize.value.y = viewSize.width / (rect.width / rect.height);
+    } else {
+      this.materials[id].uniforms.uViewSize.value.x = (rect.width / rect.height) * viewSize.height;
+      this.materials[id].uniforms.uViewSize.value.y = viewSize.height;
+    }
 
     // // Divide by scale because on the fragment shader we need values before the scale
 		this.materials[id].uniforms.uMeshPosition.value.x = x / widthViewUnit;
@@ -371,12 +380,14 @@ export default class ImageTransition {
         value: 1,
         onStart: () => {
           this.animating = true;
+          document.body.classList.add('locked');
         },
         onUpdate: () => {
             this.render();
         },
         onComplete: () => {
           document.querySelector('.fullscreen').style.zIndex = 2;
+
           this.animating = false;
         }
     });
@@ -389,6 +400,7 @@ export default class ImageTransition {
         value: 0,
         onStart: () => {
           this.animating = true;
+          document.body.classList.remove('locked');
         },
         onUpdate: () => {
           this.render();

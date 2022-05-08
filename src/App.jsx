@@ -11,9 +11,11 @@ function App() {
 
   return (
     <main className="App">
-      <Image src="/images/pic1.jpeg" alt="Hello"/>
-      <Image src="/images/pic2.jpeg" alt="Hello"/>
-      <Image src="/images/pic3.jpeg" alt="Hello"/>
+      <Image src="/images/melbourne.jpg" alt="Melboune CBD skyline"/>
+      <Image src="/images/osaka-castle.jpg" alt="Osaka Castle"/>
+      <Image src="/images/japan-eki.jpg" alt="Japanese Train Station"/>
+      <Image src="/images/crossing.jpg" alt="Road Crossing"/>
+      <Image src="/images/jp-taxi.jpg" alt="Japan's Taxi - Shutter drag"/>
 
       <canvas className="canvas"></canvas>
       <div className="fullscreen"></div>
