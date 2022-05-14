@@ -2,6 +2,7 @@
 // import vertexShader from '/shaders/vertexShader.glsl?raw';
 import gsap from 'gsap';
 import * as THREE from 'three';
+import Stats from 'stats.js';
 
 // Possible optimizations?:
 // only update the meshes that are in view.
@@ -151,6 +152,7 @@ export default class ImageTransition {
     };
     this.currentItem = -1;
     this.animating = false;
+    this.stats = false;
 
     this.scroll = {
       x: 0,
@@ -169,15 +171,18 @@ export default class ImageTransition {
     });
 
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio * 0.5, 2));
 
     // Functions
+    // this.getPerformance();
+
     this.getImages();
     this.updateImages();
     this.mouseMovement();
     this.render();
     this.setPosition();
     this.eventListeners();
+
 
   }
 
@@ -194,6 +199,12 @@ export default class ImageTransition {
       window.dispatchEvent(new Event('resize'));
     }, 300);
 
+  }
+
+  getPerformance() {
+    this.stats = new Stats();
+    this.stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+    document.body.appendChild( this.stats.dom );
   }
 
 
@@ -382,9 +393,6 @@ export default class ImageTransition {
           this.animating = true;
           document.body.classList.add('locked');
         },
-        onUpdate: () => {
-            this.render();
-        },
         onComplete: () => {
           document.querySelector('.fullscreen').style.zIndex = 2;
 
@@ -401,9 +409,6 @@ export default class ImageTransition {
         onStart: () => {
           this.animating = true;
           document.body.classList.remove('locked');
-        },
-        onUpdate: () => {
-          this.render();
         },
         onComplete: () => {
             document.querySelector('.fullscreen').style.zIndex = -1;
@@ -428,7 +433,6 @@ export default class ImageTransition {
     this.updateFullscreen(this.currentItem);
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.fov = 2 * Math.atan((window.innerHeight / 2) / this.cameraPos ) * (180 / Math.PI);
-    // this.camera.updateProjectionMatrix();
     this.updateCameraPosition();
 
     this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -439,15 +443,21 @@ export default class ImageTransition {
 
 
   render() {
+
+    if(this.stats) {
+      this.stats.begin();
+    }
     this.elapsedTime = this.clock.getElapsedTime();
 
     this.renderer.render(this.scene, this.camera);
 
-    // this.setPosition();
-
     this.materials.forEach( m => {
         m.uniforms.uTime.value = this.elapsedTime;
     });
+
+    if(this.stats) {
+      this.stats.end();
+    }
 
     window.requestAnimationFrame(this.render.bind(this));
   }
