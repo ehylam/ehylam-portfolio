@@ -7,6 +7,7 @@ specifiers:
   gsap: ^3.10.4
   react: ^18.0.0
   react-dom: ^18.0.0
+  stats.js: ^0.17.0
   three: ^0.139.2
   vite: ^2.9.5
 
@@ -14,6 +15,7 @@ dependencies:
   gsap: 3.10.4
   react: 18.1.0
   react-dom: 18.1.0_react@18.1.0
+  stats.js: 0.17.0
   three: 0.139.2
 
 devDependencies:
@@ -810,6 +812,10 @@ packages:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /stats.js/0.17.0:
+    resolution: {integrity: sha1-scPcRtlEmLV4t/05hbgaznExzH0=}
+    dev: false
 
   /supports-color/5.5.0:
     resolution: {integrity: sha512-QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow==}
