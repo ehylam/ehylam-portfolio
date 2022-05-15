@@ -4,9 +4,6 @@ import gsap from 'gsap';
 import * as THREE from 'three';
 import Stats from 'stats.js';
 
-// Possible optimizations?:
-// only update the meshes that are in view.
-
 // TODO:
 // Fix weird resizing lag issue where the rendered image isn't updating it's width and height
 
@@ -65,7 +62,8 @@ const vertexShader = `
     // (1 - 1 + 1) / 2 = 0.5; - Top right
     // (0 - 0 + 1) / 2 = 0.5; - Bottom left
     // (1 - 0 + 1) / 2 = 1; - Bottom - right
-		float activation = (+uv.x + (c * 0.4) - uv.y + (c * 0.4) + 1.)/2.;
+		// float activation = (+uv.x + (c * 0.4) - uv.y + (c * 0.4) + 1.)/2.; // Top left to bottom right
+		float activation = 2.0 * distance(uv, vec2(0.5)); // Circle
 
 		float latestStart = 0.4; // Stagger timing
 		float startAt = activation * latestStart;
@@ -174,7 +172,7 @@ export default class ImageTransition {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio * 0.5, 2));
 
     // Functions
-    // this.getPerformance();
+    this.getPerformance();
 
     this.getImages();
     this.updateImages();
