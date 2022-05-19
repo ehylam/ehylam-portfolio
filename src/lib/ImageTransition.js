@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import Stats from 'stats.js';
 
 // TODO:
-// Fix weird resizing lag issue where the rendered image isn't updating it's width and height
+// Fix scroll input lag
 
 const noise = `
 float N21(vec2 p) {

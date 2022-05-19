@@ -10,9 +10,11 @@ const Image = (props) => {
   return (
     <section ref={image} className="image_block">
       <div className="image_block__wrapper">
-        <div className="image_block__cover"></div>
-        <img className="interactable" src={props.src} alt={props.alt}/>
-        <div className="image_block__bg" style={{backgroundImage: `url(${props.src})`}}></div>
+        <div className="image_block__visuals">
+          <div className="image_block__cover"></div>
+          <img className="interactable" src={props.src} alt={props.alt}/>
+          <img className="image_block__bg" src={props.src} alt={props.alt}/>
+        </div>
         <h2 className="image_block__heading">
           <span>
             {props.heading}

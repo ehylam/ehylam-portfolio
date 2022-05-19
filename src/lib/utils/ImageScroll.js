@@ -1,6 +1,8 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+
+
 export default class ImageScroll {
   constructor(image) {
     this.imageBlock = image;
@@ -40,8 +42,15 @@ export default class ImageScroll {
     },0.7).to(this.bg, {
       scale: 1,
       duration: 0.5,
-      ease: "power5.inOut"
-    },0.7);
+      ease: "power5.inOut",
+    },0.7).to(this.bg, {
+      opacity: 0,
+      duration: 0.15,
+      ease: "power5.inOut",
+      onComplete: () => {
+        this.bg.style.display = 'none';
+      }
+    });
   }
 
 }
