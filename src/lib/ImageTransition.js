@@ -38,7 +38,7 @@ float SmoothNoise2(vec2 uv) {
   return c /= 1.5;
 }
 
-`
+`;
 
 const vertexShader = `
 	uniform float uProgress;
@@ -63,6 +63,7 @@ const vertexShader = `
     // (0 - 0 + 1) / 2 = 0.5; - Bottom left
     // (1 - 0 + 1) / 2 = 1; - Bottom - right
 		// float activation = (+uv.x + (c * 0.4) - uv.y + (c * 0.4) + 1.)/2.; // Top left to bottom right
+		// float activation = fract(length(abs(uv) - 0.5) * 100.0);
 		float activation = 2.0 * distance(uv, vec2(0.5)); // Circle
 
 		float latestStart = 0.4; // Stagger timing
@@ -181,7 +182,6 @@ export default class ImageTransition {
     this.setPosition();
     this.eventListeners();
 
-
   }
 
   eventListeners() {
@@ -205,7 +205,6 @@ export default class ImageTransition {
     document.body.appendChild( this.stats.dom );
   }
 
-
   getImages() {
     // Material template
     const materialRef = new THREE.ShaderMaterial({
@@ -222,7 +221,6 @@ export default class ImageTransition {
 
     this.imageArr = this.images.map(img => {
       id++; // doing this first because we are returning the ID
-
       const bounds = img.getBoundingClientRect();
 
       const geometry = new THREE.PlaneBufferGeometry(1, 1, 10, 10);
