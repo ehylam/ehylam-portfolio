@@ -10,7 +10,7 @@ export default class ImageScroll {
     this.bg = this.imageBlock.querySelector('.image_block__bg');
 
     gsap.registerPlugin(ScrollTrigger);
-    this.onReady();
+    window.addEventListener('load', this.onReady.bind(this));
   }
 
   onReady() {
