@@ -12,8 +12,17 @@ export default class SmoothScroll {
     this.currentScroll = 0;
     this.scrollTarget = 0;
     this.ease = 0.075;
-    document.body.style.height = `${this.scrollable.getBoundingClientRect().height}px`;
+
+    this.eventListeners();
     requestAnimationFrame(() => this.render());
+
+  }
+
+  eventListeners() {
+    window.addEventListener('load', () => {
+      document.body.style.height = `${this.scrollable.getBoundingClientRect().height}px`;
+    });
+
   }
 
   smoothScroll() {
