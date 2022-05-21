@@ -2,10 +2,8 @@
 // import vertexShader from '/shaders/vertexShader.glsl?raw';
 import gsap from 'gsap';
 import * as THREE from 'three';
+import SmoothScroll from './utils/SmoothScroll';
 import Stats from 'stats.js';
-
-// TODO:
-// Fix scroll input lag
 
 const noise = `
 float N21(vec2 p) {
@@ -110,12 +108,12 @@ const fragmentShader = `
 	}
 `;
 
-
 export default class ImageTransition {
   constructor(canvas) {
     // DOM Elements
     this.canvas = document.querySelector(canvas);
     this.images = [...document.querySelectorAll('img.interactable')];
+
     this.imageArr = [];
 
     // Scene
@@ -124,12 +122,12 @@ export default class ImageTransition {
     // Camera
     this.cameraPos = 600;
     this.fieldOfView = 70;
-    this.nearPlane = 0.1;
+    this.nearPlane = 100;
     this.farPlane = 2000;
 
     // Reference - https://i7x7p5b7.stackpathcdn.com/codrops/wp-content/uploads/2019/10/g.png
     this.camera = new THREE.PerspectiveCamera( this.fieldOfView, window.innerWidth / window.innerHeight, this.nearPlane, this.farPlane );
-    this.camera.position.set(0, 0, this.cameraPos);
+    this.camera.position.z = this.cameraPos;
     this.camera.fov = 2 * Math.atan((window.innerHeight / 2) / this.cameraPos ) * (180 / Math.PI);
     this.scene.add(this.camera);
 
@@ -158,6 +156,7 @@ export default class ImageTransition {
       y: 0
     };
     this.isDown = false;
+    this.smoothScroll = new SmoothScroll();
 
     // Raycaster
     this.raycaster = new THREE.Raycaster();
@@ -186,7 +185,7 @@ export default class ImageTransition {
 
   eventListeners() {
     window.addEventListener('resize', this.resize.bind(this));
-    window.addEventListener('scroll', this.updateCameraPosition.bind(this));
+    // window.addEventListener('scroll', this.updateCameraPosition.bind(this));
 
     this.imageArr.forEach((obj, i) => {
       obj.img.addEventListener("mousedown", () => this.meshClick(obj));
@@ -196,6 +195,11 @@ export default class ImageTransition {
     setTimeout(() => {
       window.dispatchEvent(new Event('resize'));
     }, 300);
+
+    window.addEventListener('beforeunload', () => {
+      window.scrollTo(0, 0);
+    });
+
 
   }
 
@@ -278,13 +282,12 @@ export default class ImageTransition {
     this.imageArr.forEach(img => {
       const bb = this.images[img.id].getBoundingClientRect();
       img.mesh.position.x = (bb.left - window.innerWidth / 2) + (bb.width / 2);
-      img.mesh.position.y = (-bb.top + window.innerHeight / 2) - (bb.height / 2) + this.scroll.y;
+      img.mesh.position.y = (-bb.top + window.innerHeight / 2) - (bb.height / 2);
     });
   }
 
   updateCameraPosition() {
-    this.scroll.y = -window.scrollY;
-    this.camera.position.y = this.scroll.y;
+    this.camera.position.set(0, -this.smoothScroll.currentScroll, this.cameraPos);
     this.camera.updateProjectionMatrix();
   }
 
@@ -421,14 +424,13 @@ export default class ImageTransition {
     return { width: height * this.camera.aspect, height };
   }
 
-
-
   resize() {
     this.updateImages();
     this.setPosition();
     this.updateFullscreen(this.currentItem);
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.fov = 2 * Math.atan((window.innerHeight / 2) / this.cameraPos ) * (180 / Math.PI);
+    // this.camera.updateProjectionMatrix();
     this.updateCameraPosition();
 
     this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -437,20 +439,21 @@ export default class ImageTransition {
 
   }
 
-
   render() {
 
     if(this.stats) {
       this.stats.begin();
     }
+
+    this.smoothScroll.render();
+    this.updateCameraPosition();
+
     this.elapsedTime = this.clock.getElapsedTime();
-
-    this.renderer.render(this.scene, this.camera);
-
     this.materials.forEach( m => {
-        m.uniforms.uTime.value = this.elapsedTime;
+      m.uniforms.uTime.value = this.elapsedTime;
     });
 
+    this.renderer.render(this.scene, this.camera);
     if(this.stats) {
       this.stats.end();
     }
