@@ -2,7 +2,7 @@
 // import vertexShader from '/shaders/vertexShader.glsl?raw';
 import gsap from 'gsap';
 import * as THREE from 'three';
-import SmoothScroll from './utils/SmoothScroll';
+import SmoothScroll from './utils/smoothScroll';
 import Stats from 'stats.js';
 
 const noise = `
@@ -36,6 +36,17 @@ float SmoothNoise2(vec2 uv) {
   return c /= 1.5;
 }
 
+`;
+
+const random = `
+float random( vec2 p )
+{
+  vec2 K1 = vec2(
+    23.14069263277926, // e^pi (Gelfond's constant)
+    2.665144142690225 // 2^sqrt(2) (Gelfond–Schneider constant)
+  );
+return fract( cos( dot(p,K1) ) * 12345.6789 );
+}
 `;
 
 const vertexShader = `
@@ -100,11 +111,15 @@ const fragmentShader = `
 
   ${noise}
 
+  ${random}
+
 	void main(){
     vec2 uv = vUv;
-    float c = SmoothNoise2(uv);
-    vec4 tex = texture2D(uImage, uv);
-    gl_FragColor = tex;
+    vec4 texture = texture2D(uImage, uv);
+    uv.y *= random(vec2(uv.y, uTime));
+    texture.rgb += random(uv) * 0.15;
+
+    gl_FragColor = texture;
 	}
 `;
 
@@ -278,16 +293,16 @@ export default class ImageTransition {
     });
   }
 
-  setPosition() {
+  setPosition(updateX) {
     this.imageArr.forEach(img => {
       const bb = this.images[img.id].getBoundingClientRect();
       img.mesh.position.x = (bb.left - window.innerWidth / 2) + (bb.width / 2);
-      img.mesh.position.y = (-bb.top + window.innerHeight / 2) - (bb.height / 2);
+      img.mesh.position.y = (-bb.top + window.innerHeight / 2) - (bb.height / 2) - this.smoothScroll.currentScroll;
     });
   }
 
   updateCameraPosition() {
-    this.camera.position.set(0, -this.smoothScroll.currentScroll, this.cameraPos);
+    this.camera.position.y = -this.smoothScroll.currentScroll;
     this.camera.updateProjectionMatrix();
   }
 
@@ -426,7 +441,7 @@ export default class ImageTransition {
 
   resize() {
     this.updateImages();
-    this.setPosition();
+    this.setPosition(true);
     this.updateFullscreen(this.currentItem);
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.fov = 2 * Math.atan((window.innerHeight / 2) / this.cameraPos ) * (180 / Math.PI);

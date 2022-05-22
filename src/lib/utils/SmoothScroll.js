@@ -23,6 +23,10 @@ export default class SmoothScroll {
       document.body.style.height = `${this.scrollable.getBoundingClientRect().height}px`;
     });
 
+    window.addEventListener('resize', () => {
+      document.body.style.height = `${this.scrollable.getBoundingClientRect().height}px`;
+    });
+
   }
 
   smoothScroll() {

@@ -1,0 +1,27 @@
+.hero {
+  position: relative;
+  height: 100vh;
+
+  &__heading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%);
+    font-size: 15vw;
+    line-height: 1;
+    font-weight: 400;
+    color: var(--dark-color);
+    max-height: 1em;
+    overflow: hidden;
+
+    &-group {
+      &:not(:first-child) {
+        transform: translateY(-50%);
+      }
+    }
+
+    &-parent {
+      display: flex;
+    }
+  }
+}

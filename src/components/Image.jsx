@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import ImageScroll from '../lib/utils/ImageScroll';
+import ImageScroll from '../lib/utils/imageScroll';
 import '../lib/scss/Image.scss';
 
 const Image = (props) => {

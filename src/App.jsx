@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import './App.css';
+import Hero from './components/Hero';
 import Image from './components/Image';
-import ImageTransition from './lib/ImageTransition';
-import SmoothScroll from './lib/utils/SmoothScroll';
+import ImageTransition from './lib/imageTransition';
+import SmoothScroll from './lib/utils/smoothScroll';
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
   return (
     <main className="App">
       <section className="scroll">
+        <Hero headings={['Welcome', 'こんにちは']} />
         <Image src="/images/melbourne.jpg" alt="Melboune CBD skyline" heading="Melbourne CBD Skyline" />
         <Image src="/images/osaka-castle.jpg" alt="Osaka Castle" heading="Oaska Castle" />
         <Image src="/images/japan-eki.jpg" alt="Train Station" heading="Train Station" />
