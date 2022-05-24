@@ -2,8 +2,8 @@
 // import vertexShader from '/shaders/vertexShader.glsl?raw';
 import gsap from 'gsap';
 import * as THREE from 'three';
-import SmoothScroll from './utils/smoothScroll';
-import ImageScroll from './utils/imageScroll';
+import SmoothScroll from './smoothScroll';
+import ImageScroll from './imageScroll';
 import Stats from 'stats.js';
 
 const noise = `
