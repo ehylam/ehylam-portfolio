@@ -3,6 +3,7 @@
 import gsap from 'gsap';
 import * as THREE from 'three';
 import SmoothScroll from './utils/smoothScroll';
+import ImageScroll from './utils/imageScroll';
 import Stats from 'stats.js';
 
 const noise = `
@@ -65,7 +66,7 @@ const vertexShader = `
 	void main(){
 		vec3 pos = position;
 
-    float c = SmoothNoise2(uv / 2.);
+    float c = SmoothNoise2(uv * 0.5);
 
     // (0 - 1 + 1) / 2 = 0; - Top left
     // (1 - 1 + 1) / 2 = 0.5; - Top right
@@ -73,6 +74,7 @@ const vertexShader = `
     // (1 - 0 + 1) / 2 = 1; - Bottom - right
 		// float activation = (+uv.x + (c * 0.4) - uv.y + (c * 0.4) + 1.)/2.; // Top left to bottom right
 		// float activation = fract(length(abs(uv) - 0.5) * 100.0);
+    // float activation = c;
 		float activation = 2.0 * distance(uv, vec2(0.5)); // Circle
 
 		float latestStart = 0.4; // Stagger timing
@@ -107,7 +109,10 @@ const fragmentShader = `
   uniform sampler2D uImage;
   uniform vec2 uAspectRatio;
   uniform float uTime;
+  uniform vec2 uCursor;
   varying vec2 vUv;
+  uniform float uDirection;
+  uniform float uHover;
 
   ${noise}
 
@@ -115,6 +120,8 @@ const fragmentShader = `
 
 	void main(){
     vec2 uv = vUv;
+    // float c = SmoothNoise2(vec2(uv.x + uDirection, uv.y + uDirection) + uTime);
+
     vec4 texture = texture2D(uImage, uv);
     uv.y *= random(vec2(uv.y, uTime));
     texture.rgb += random(uv) * 0.15;
@@ -160,7 +167,8 @@ export default class ImageTransition {
       uCursor: new THREE.Uniform(new THREE.Vector2(0.5, 0.5)),
       uImage: {value: 0},
       uTime: {value: 0},
-      uHover: {value: 0}
+      uHover: {value: 0},
+      uDirection: {value: 0}
     };
     this.currentItem = -1;
     this.animating = false;
@@ -172,6 +180,7 @@ export default class ImageTransition {
     };
     this.isDown = false;
     this.smoothScroll = new SmoothScroll();
+    this.imageScroll = new ImageScroll(this.images);
 
     // Raycaster
     this.raycaster = new THREE.Raycaster();
@@ -187,7 +196,7 @@ export default class ImageTransition {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio * 0.5, 2));
 
     // Functions
-    this.getPerformance();
+    // this.getPerformance();
 
     this.getImages();
     this.updateImages();
@@ -200,7 +209,7 @@ export default class ImageTransition {
 
   eventListeners() {
     window.addEventListener('resize', this.resize.bind(this));
-    // window.addEventListener('scroll', this.updateCameraPosition.bind(this));
+    window.addEventListener('scroll', this.screenTraverse.bind(this));
 
     this.imageArr.forEach((obj, i) => {
       obj.img.addEventListener("mousedown", () => this.meshClick(obj));
@@ -257,6 +266,7 @@ export default class ImageTransition {
 
       mesh.isPickable = true;
       mesh.matrixAutoUpdate = true;
+      mesh.visible = false;
 
       this.materials.push(material);
       this.scene.add(mesh);
@@ -293,7 +303,7 @@ export default class ImageTransition {
     });
   }
 
-  setPosition(updateX) {
+  setPosition() {
     this.imageArr.forEach(img => {
       const bb = this.images[img.id].getBoundingClientRect();
       img.mesh.position.x = (bb.left - window.innerWidth / 2) + (bb.width / 2);
@@ -304,6 +314,21 @@ export default class ImageTransition {
   updateCameraPosition() {
     this.camera.position.y = -this.smoothScroll.currentScroll;
     this.camera.updateProjectionMatrix();
+    // this.screenTraverse();
+  }
+
+  screenTraverse() {
+    this.imageArr.forEach(data => {
+      const { mesh, bounds } = data;
+      const imagePos = bounds.y - this.smoothScroll.scrollTarget - window.innerHeight; // based on center origin
+
+      if(imagePos < 0) {
+        mesh.visible = true;
+      }
+
+    });
+
+    this.uniforms.uDirection = this.smoothScroll.scrollDirection;
   }
 
   mouseMovement() {
@@ -321,6 +346,8 @@ export default class ImageTransition {
   }
 
   meshClick(obj) {
+    if(Math.floor(this.smoothScroll.previousScroll) !== Math.floor(this.smoothScroll.currentScroll)) return false;
+
     const { img, id, mesh } = obj;
     const rect = img.getBoundingClientRect();
     mesh.position.z = 1;
@@ -406,9 +433,11 @@ export default class ImageTransition {
         onStart: () => {
           this.animating = true;
           document.body.classList.add('locked');
+          this.canvas.style.zIndex = 1;
         },
         onComplete: () => {
           document.querySelector('.fullscreen').style.zIndex = 2;
+
 
           this.animating = false;
         }
@@ -423,6 +452,7 @@ export default class ImageTransition {
         onStart: () => {
           this.animating = true;
           document.body.classList.remove('locked');
+          this.canvas.style.zIndex = -1;
         },
         onComplete: () => {
             document.querySelector('.fullscreen').style.zIndex = -1;

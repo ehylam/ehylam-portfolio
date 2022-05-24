@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Koulen&family=Titillium+Web:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DotGothic16&family=Koulen&family=Mochiy+Pop+One&family=Titillium+Web:wght@400;700&display=swap');
 
 * {
 	margin: 0;
@@ -70,4 +70,15 @@ body.locked {
 
 .hero {
 	min-height: 100vh;
+}
+
+a {
+	color: rgb(53, 53, 53);
+	text-decoration: underline;
+	text-decoration-color: transparent;
+	transition: text-decoration-color 0.3s;
+}
+
+a:hover {
+	text-decoration-color: rgb(53, 53, 53);
 }

@@ -1,14 +1,14 @@
-import { useEffect, useRef } from 'react';
-import ImageScroll from '../lib/utils/imageScroll';
+// import { useEffect, useRef } from 'react';
+// import ImageScroll from '../lib/utils/imageScroll';
 import '../lib/scss/Image.scss';
 
 const Image = (props) => {
-  const image = useRef(null);
-  useEffect(() => {
-    new ImageScroll(image.current);
-  },[])
+  // const image = useRef(null);
+  // useEffect(() => {
+  //   new ImageScroll(image.current);
+  // },[]);
   return (
-    <section ref={image} className="image_block">
+    <section className="image_block">
       <div className="image_block__wrapper">
         <div className="image_block__visuals">
           <div className="image_block__cover"></div>

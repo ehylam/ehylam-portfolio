@@ -1,7 +1,7 @@
 
 .image_block {
   position: relative;
-  min-height: 75vw;
+  min-height: 110vw;
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
@@ -38,16 +38,17 @@
 
   &__visuals {
     position: relative;
-    overflow: hidden;
+    // overflow: hidden;
   }
 
   &__cover {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: -1px;
+    left: -1px;
     width: calc(100% + 2px);
     height: calc(100% + 2px);
     z-index: 2;
+    cursor: default;
     transform-origin: left;
     transform: scaleX(1);
     background-color: var(--dark-color);

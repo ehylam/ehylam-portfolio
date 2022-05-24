@@ -5,40 +5,40 @@ import '../lib/scss/Hero.scss';
 const Hero = (props) => {
   const splitText = (text) => {
     return text.split('').map((word, index) => {
-      return <span key={index}>{word}</span>;
+      return <span key={index} className="t"><span>{word}</span></span>;
     });
   }
 
+  function heroHeadingAnimation() {
+    const headingTl = gsap.timeline({
+      onComplete: () => {
+        document.querySelector('.hero__copy').classList.add('visible');
+
+      }
+    });
+
+    headingTl.to('.hero__heading .hero__heading-parent:first-child .t span', {
+      x: 0,
+      duration: 0.08,
+    }).to('.hero__heading .hero__heading-parent:first-child .t span', {
+      x: '-110%',
+      duration: 0.08,
+    },'+=0.8').to('.hero__heading .hero__heading-parent:nth-child(2) .t span', {
+      x: 0,
+      duration: 0.08,
+    }).to('.hero__heading .hero__heading-parent:nth-child(2) .t span', {
+      x: '-110%',
+      duration: 0.08,
+      delay: 1
+    }).to('.hero__heading .hero__heading-parent:last-child .t span', {
+      x: '0',
+      duration: 0.08,
+    });
+  }
+
+
   useEffect(() => {
-    const headingParent = gsap.utils.toArray('.hero__heading-parent');
-
-    // headingParent.forEach(function(heading, i) {
-    //   const headingTexts = heading.querySelectorAll('span');
-    //   const heroTl = gsap.timeline({});
-    //   const delay = i * 0.75;
-
-    //   heroTl.to(headingTexts, {
-    //     y: '-100%',
-    //     duration: 0.75,
-    //     stagger: 0.030,
-    //     delay: delay,
-    //   }).to(heading, {
-    //     opacity: 0,
-    //     duration: 0,
-    //     delay: delay + 1,
-    //     onComplete: () => {
-    //       document.querySelector('.hero__heading').appendChild(heading);
-    //       gsap.to(headingTexts, {
-    //         y: '100%',
-    //         opacity: 1,
-    //         duration: 0,
-    //       })
-    //     }
-    //   });
-    // });
-
-
-
+    heroHeadingAnimation();
   },[]);
 
   return (
@@ -48,6 +48,10 @@ const Hero = (props) => {
           return <span key={index} className="hero__heading-parent">{splitText(word)}</span>;
         })}
       </h1>
+
+      <div className="hero__copy">
+        <div dangerouslySetInnerHTML={{__html: props.copy}} />
+      </div>
     </section>
    );
 }

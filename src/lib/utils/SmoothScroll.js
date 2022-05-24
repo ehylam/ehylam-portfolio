@@ -8,9 +8,12 @@ function lerp(start, end, t) {
 
 export default class SmoothScroll {
   constructor() {
-    this.scrollable = document.querySelector('section.scroll');
+    this.scrollable = document.querySelector('.scroll');
+    this.previousScroll = 0
     this.currentScroll = 0;
     this.scrollTarget = 0;
+    this.scrollDirection = 0;
+    this.scrollDelta = 0;
     this.ease = 0.075;
 
     this.eventListeners();
@@ -31,8 +34,11 @@ export default class SmoothScroll {
 
   smoothScroll() {
     this.scrollTarget = window.scrollY;
+    this.previousScroll = this.currentScroll;
     this.currentScroll = lerp(this.currentScroll, this.scrollTarget, this.ease);
     this.scrollable.style.transform = `translate3d(0, ${-this.currentScroll}px, 0)`;
+    this.scrollDirection = Math.sign(this.scrollTarget - this.previousScroll);
+    this.scrollDelta = this.scrollTarget - this.currentScroll;
   }
 
   render() {

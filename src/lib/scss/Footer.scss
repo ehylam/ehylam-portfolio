@@ -1,0 +1,24 @@
+footer {
+  display: flex;
+  padding: 15px 30px;
+  justify-content: center;
+  flex-direction: column;
+  align-items: flex-end;
+
+  @media (min-width: 768px) {
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  p {
+    font-size: 14px;
+    line-height: 1.2;
+    margin: 0;
+    text-align: right;
+
+    @media (min-width: 768px) {
+      text-align: left;
+    }
+  }
+}
