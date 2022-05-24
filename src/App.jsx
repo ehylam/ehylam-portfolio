@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import './App.css';
 import Hero from './components/Hero';
 import Image from './components/Image';
-import ImageTransition from './lib/imageTransition';
+import ImageTransition from '../src/lib/imageTransition';
 import Footer from './components/Footer';
 
 
@@ -10,7 +10,6 @@ function App() {
 
   useEffect(() => {
     new ImageTransition('.canvas');
-    // new SmoothScroll();
   },[]);
 
   return (
