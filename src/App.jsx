@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import './App.css';
 import Hero from './components/Hero';
 import Image from './components/Image';
-import ImageTransition from './lib/utils/imageTransition';
+import ImageTransition from './lib/utils/imageTransition.js';
 import Footer from './components/Footer';
 
 
