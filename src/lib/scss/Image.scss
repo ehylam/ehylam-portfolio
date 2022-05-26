@@ -15,7 +15,6 @@
   &:nth-child(even) {
     justify-content: flex-start;
 
-
     .image_block__heading {
       text-align: right;
     }
@@ -28,7 +27,10 @@
   img {
     max-height: 50vh;
     max-width: 75vw;
-    opacity: 0;
+
+    &.interactable {
+      opacity: 0;
+    }
   }
 
   &__wrapper {
@@ -38,7 +40,7 @@
 
   &__visuals {
     position: relative;
-    // overflow: hidden;
+    overflow: hidden;
   }
 
   &__cover {
@@ -59,7 +61,8 @@
     position: absolute;
     left: 0;
     top: 0;
-    transform: scale(1.1);
+    transform: scale(1.15);
+    opacity: 1;
   }
 
   &__heading {
@@ -76,24 +79,32 @@
     -webkit-text-fill-color: transparent;
     -webkit-background-clip: text;
     font-weight: bold;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.01px;
     text-transform: uppercase;
     transition: transform 0.4s ease;
-    font-family: 'Titillium Web', sans-serif;
+    font-family: 'Press Start 2P', cursive;
 
     @media (min-width: 768px) {
       font-size: 32px;
     }
 
     @media (min-width: 1024px) {
-      font-size: 50px;
+      font-size: 2vw;
       line-height: 1;
     }
 
     span {
-      display: inline-block;
       position: relative;
-      transform: translate3d(0, -100%, 0);
+      display: inline-block;
+
+      &.t {
+        overflow: hidden;
+
+        span {
+          position: relative;
+          transform: translate3d(0, -100%, 0);
+        }
+      }
     }
 
 
@@ -101,5 +112,17 @@
     // &:hover {
     //   background-size: 100% 200%;
     // }
+  }
+}
+
+@keyframes worm {
+  0% {
+    transform: scale(0);
+  }
+  0% {
+    transform: scale(100%);
+  }
+  100% {
+    transform: scale(0);
   }
 }

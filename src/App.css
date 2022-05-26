@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DotGothic16&family=Koulen&family=Mochiy+Pop+One&family=Titillium+Web:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DotGothic16&family=Press+Start+2P&family=VT323&display=swap');
 
 * {
 	margin: 0;
@@ -16,18 +16,9 @@
 }
 
 body {
-	font-family: 'Titillium Web', sans-serif;
 	color: var(--dark-color);
 	background-color: var(--light-color);
-	/* overscroll-behavior: none; */
-	/* height: 100vh; */
-}
-
-h1,
-h2,
-h3,
-h4 {
-	font-family: 'Koulen', cursive;
+	font-family: 'DotGothic16', sans-serif;
 }
 
 body.locked {
@@ -73,12 +64,13 @@ body.locked {
 }
 
 a {
-	color: rgb(53, 53, 53);
+	color: var(--dark-color);
 	text-decoration: underline;
 	text-decoration-color: transparent;
 	transition: text-decoration-color 0.3s;
 }
 
 a:hover {
-	text-decoration-color: rgb(53, 53, 53);
+	text-decoration-color: var(--dark-color);
+	opacity: 0.7;
 }

@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
+import Nav from './components/Nav';
 import Hero from './components/Hero';
 import Image from './components/Image';
 import ImageTransition from './lib/utils/ImageTransition';
@@ -7,13 +8,32 @@ import Footer from './components/Footer';
 
 
 function App() {
+  const [isDark, setIsDark] = useState(false);
+  const lightColour = '#f8f8f8'
+  const darkColour = '#1c1c1c';
 
   useEffect(() => {
     new ImageTransition('.canvas');
   },[]);
 
+  const toggleDark = () => {
+    setIsDark(!isDark);
+  };
+
+  // on useState update update the css variables
+  useEffect(() => {
+    if(isDark) {
+      document.documentElement.style.setProperty('--dark-color', lightColour);
+      document.documentElement.style.setProperty('--light-color', darkColour);
+    } else {
+      document.documentElement.style.setProperty('--dark-color', darkColour);
+      document.documentElement.style.setProperty('--light-color', lightColour);
+    }
+  },[isDark]);
+
   return (
     <main className="App">
+      <Nav toggle={{isDark, toggleDark}} />
       <div className="scroll">
         <Hero headings={['Välkommen', 'ようこそ', ' Welcome']} copy={"<p>Hey welcome to my portfolio, a portfolio to showcase my photographs and web dev skills! Two in one.</p><p>Currently work as a Front-end Developer @ <a href='https://chriate.com.au/' target='_blank'>Chriate</a> in Melbourne, Australia.</section></p><p>Born in a lovely coastal city called <a href='https://www.visitwollongong.com.au/'>Wollongong</a> in NSW, Australia 🌅 (please do check that place out!).</p>"} />
         <Image src="/images/melbourne.jpg" alt="Melboune CBD skyline" heading="Melbourne CBD Skyline" />

@@ -12,10 +12,11 @@ footer {
   }
 
   p {
-    font-size: 14px;
+    font-size: 18px;
     line-height: 1.2;
     margin: 0;
     text-align: right;
+    font-family: 'VT323', monospace;
 
     @media (min-width: 768px) {
       text-align: left;

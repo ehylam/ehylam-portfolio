@@ -197,7 +197,6 @@ export default class ImageTransition {
 
     // Functions
     // this.getPerformance();
-
     this.getImages();
     this.updateImages();
     this.mouseMovement();

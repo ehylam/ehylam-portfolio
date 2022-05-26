@@ -3,10 +3,13 @@
 import '../lib/scss/Image.scss';
 
 const Image = (props) => {
-  // const image = useRef(null);
-  // useEffect(() => {
-  //   new ImageScroll(image.current);
-  // },[]);
+  const splitText = (text) => {
+    return text.split('').map((word, index) => {
+      if (word === ' ') return <span key={index}>&nbsp;</span>;
+      return <span key={index} className="t"><span>{word}</span></span>;
+    });
+  }
+
   return (
     <section className="image_block">
       <div className="image_block__wrapper">
@@ -16,8 +19,8 @@ const Image = (props) => {
           <img className="image_block__bg" src={props.src} alt={props.alt}/>
         </div>
         <h2 className="image_block__heading">
-          <span>
-            {props.heading}
+          <span className="parent">
+            {splitText(props.heading)}
           </span>
         </h2>
       </div>

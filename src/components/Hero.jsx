@@ -13,7 +13,6 @@ const Hero = (props) => {
     const headingTl = gsap.timeline({
       onComplete: () => {
         document.querySelector('.hero__copy').classList.add('visible');
-
       }
     });
 
@@ -27,7 +26,7 @@ const Hero = (props) => {
       x: 0,
       duration: 0.08,
     }).to('.hero__heading .hero__heading-parent:nth-child(2) .t span', {
-      x: '-110%',
+      x: '110%',
       duration: 0.08,
       delay: 1
     }).to('.hero__heading .hero__heading-parent:last-child .t span', {
@@ -38,7 +37,9 @@ const Hero = (props) => {
 
 
   useEffect(() => {
-    heroHeadingAnimation();
+    setTimeout(() => { // Jank
+      heroHeadingAnimation();
+    },1000);
   },[]);
 
   return (

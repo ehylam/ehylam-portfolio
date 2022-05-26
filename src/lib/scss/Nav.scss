@@ -1,0 +1,19 @@
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 30px;
+  display: flex;
+  justify-content: flex-end;
+  z-index: 50;
+
+  &__mode {
+    button {
+      padding: 0;
+      border: 0;
+      background-color: transparent;
+      cursor: pointer;
+    }
+  }
+}
