@@ -7,6 +7,7 @@
   display: flex;
   justify-content: flex-end;
   z-index: 50;
+  pointer-events: none;
 
   &__mode {
     button {
@@ -14,6 +15,7 @@
       border: 0;
       background-color: transparent;
       cursor: pointer;
+      pointer-events: auto;
     }
   }
 }

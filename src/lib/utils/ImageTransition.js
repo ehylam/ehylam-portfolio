@@ -316,10 +316,11 @@ export default class ImageTransition {
     // this.screenTraverse();
   }
 
+  // * This is used to fix the canvas and the other HTML elements from overlapping each other during the animation transition phase.
   screenTraverse() {
     this.imageArr.forEach(data => {
       const { mesh, bounds } = data;
-      const imagePos = bounds.y - this.smoothScroll.scrollTarget - window.innerHeight; // based on center origin
+      const imagePos = bounds.y - this.smoothScroll.scrollTarget - (window.innerHeight / 2); // based on center origin
 
       if(imagePos < 0) {
         mesh.visible = true;
@@ -330,6 +331,7 @@ export default class ImageTransition {
     this.uniforms.uDirection = this.smoothScroll.scrollDirection;
   }
 
+  // * Mouse cursor interception with the nearest mesh
   mouseMovement() {
     window.addEventListener( 'mousemove', (event) => {
       this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
@@ -454,9 +456,9 @@ export default class ImageTransition {
         },
         onComplete: () => {
           document.querySelector('.fullscreen').style.zIndex = -1;
-          this.canvas.style.zIndex = -1;
           mesh.position.z = 0;
-          this.animating = false;
+          this.canvas.style.zIndex = -1;
+            this.animating = false;
         }
     });
   }
@@ -474,7 +476,7 @@ export default class ImageTransition {
     this.updateFullscreen(this.currentItem);
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.fov = 2 * Math.atan((window.innerHeight / 2) / this.cameraPos ) * (180 / Math.PI);
-    // this.camera.updateProjectionMatrix();
+    // this.camera.updateProjectionMatrix(); // ! Don't need this, its being executed in the updateCameraPosition function
     this.updateCameraPosition();
 
     this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -484,7 +486,6 @@ export default class ImageTransition {
   }
 
   render() {
-
     if(this.stats) {
       this.stats.begin();
     }

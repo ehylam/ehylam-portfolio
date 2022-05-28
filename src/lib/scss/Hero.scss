@@ -79,6 +79,11 @@
       width: calc(100% - 120px);
       left: 60px;
       font-size: 1.5vw;
+      bottom: 60px;
+    }
+
+    @media (min-width: 2000px) {
+      font-size: 30px;
     }
 
     &.visible {
@@ -100,7 +105,7 @@
       opacity: 0;
 
       &:not(:last-child) {
-        margin-bottom: 0.5em;
+        margin-bottom: 0.3em;
       }
 
       &::before {
@@ -115,7 +120,7 @@
         // height: 0.2em;
         height: calc(100% + 5px);
         background-color: var(--light-color);
-        transition: all 0.8s cubic-bezier(0.88, 0.17, 0.08, 0.88);
+        transition: all 0.6s cubic-bezier(0.88, 0.17, 0.08, 0.88);
         z-index: 1;
       }
 
@@ -131,8 +136,8 @@
         // height: 0.2em;
         height: 100%;
         background-color: var(--dark-color);
-        transition: all 0.8s cubic-bezier(0.88, 0.17, 0.08, 0.88);
-        transition-delay: 0.7s;
+        transition: all 0.4s cubic-bezier(0.88, 0.17, 0.08, 0.88);
+        transition-delay: 0.6s;
         z-index: 0;
       }
     }
