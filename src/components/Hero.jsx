@@ -16,7 +16,10 @@ const Hero = (props) => {
       }
     });
 
-    headingTl.to('.hero__heading .hero__heading-parent:first-child .t span', {
+    headingTl.to('.hero__heading', {
+      opacity: 1,
+      duration: 0,
+    }).to('.hero__heading .hero__heading-parent:first-child .t span', {
       x: 0,
       duration: 0.08,
     }).to('.hero__heading .hero__heading-parent:first-child .t span', {

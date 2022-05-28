@@ -451,12 +451,12 @@ export default class ImageTransition {
         onStart: () => {
           this.animating = true;
           document.body.classList.remove('locked');
-          this.canvas.style.zIndex = -1;
         },
         onComplete: () => {
-            document.querySelector('.fullscreen').style.zIndex = -1;
-            mesh.position.z = 0;
-            this.animating = false;
+          document.querySelector('.fullscreen').style.zIndex = -1;
+          this.canvas.style.zIndex = -1;
+          mesh.position.z = 0;
+          this.animating = false;
         }
     });
   }
