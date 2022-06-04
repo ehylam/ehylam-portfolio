@@ -1,10 +1,16 @@
-// import { useEffect } from 'react';
+import { useEffect } from 'react';
+import { handleTransition } from '../lib/hooks/handleTransition';
 import Hero from '../components/Hero';
-import { useMatch } from 'react-router-dom';
 
-const Play = () => {
+const Play = (props) => {
+  useEffect(() => {
+    handleTransition(props);
+  },[props.transitionState])
+
   return (
-    <Hero headings={['Play', 'time', 'Playtime!']} copy={'<p>Testing page transitions with GSAP</p>'} />
+    <>
+      <Hero headings={['Play', 'time', 'Playtime!']} copy={'<p>Testing page transitions with GSAP</p>'} />
+    </>
    );
 }
 

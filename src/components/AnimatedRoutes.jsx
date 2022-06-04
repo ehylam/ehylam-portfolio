@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import App from '../App';
+import Home from '../routes/Home';
 import Play from '../routes/Play';
 
 const AnimatedRoutes = () => {
@@ -12,12 +12,18 @@ const AnimatedRoutes = () => {
     if(location !== currentLocation) setTransitionState('exit');
   },[location, currentLocation]);
 
+  const toggleTransition = () => {
+    setTransitionState(transitionState === 'enter' ? 'exit' : 'enter');
+  }
 
+  const toggleLocation = () => {
+    setCurrentLocation(location);
+  }
 
   return (
     <Routes location={currentLocation}>
-      <Route path="/" element={<App />} />
-      <Route path="play" element={<Play />} />
+      <Route path="/" element={<Home transitionState={transitionState} toggleTransition={toggleTransition} toggleLocation={toggleLocation} />} />
+      <Route path="play" element={<Play transitionState={transitionState} toggleTransition={toggleTransition} toggleLocation={toggleLocation} />} />
     </Routes>
    );
 }
