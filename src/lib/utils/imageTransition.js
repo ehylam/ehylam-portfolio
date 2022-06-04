@@ -131,7 +131,7 @@ const fragmentShader = `
 `;
 
 export default class ImageTransition {
-  constructor(canvas) {
+constructor(canvas) {
     // DOM Elements
     this.canvas = document.querySelector(canvas);
     this.images = [...document.querySelectorAll('img.interactable')];
@@ -180,7 +180,7 @@ export default class ImageTransition {
     };
     this.isDown = false;
     this.smoothScroll = new SmoothScroll();
-    this.imageScroll = new ImageScroll(this.images);
+
 
     // Raycaster
     this.raycaster = new THREE.Raycaster();
@@ -195,9 +195,11 @@ export default class ImageTransition {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio * 0.5, 2));
 
-    // Functions
     // this.getPerformance();
     this.getImages();
+
+    this.imageScroll = new ImageScroll(this.imageArr);
+
     this.updateImages();
     this.mouseMovement();
     this.render();
@@ -316,17 +318,16 @@ export default class ImageTransition {
     // this.screenTraverse();
   }
 
-  // * This is used to fix the canvas and the other HTML elements from overlapping each other during the animation transition phase.
   screenTraverse() {
-    this.imageArr.forEach(data => {
-      const { mesh, bounds } = data;
-      const imagePos = bounds.y - this.smoothScroll.scrollTarget - (window.innerHeight / 2); // based on center origin
+    // this.imageArr.forEach(data => {
+    //   const { mesh, bounds } = data;
+    //   const imagePos = bounds.y - this.smoothScroll.scrollTarget - (window.innerHeight / 2); // based on center origin
+    //   console.log(imagePos);
+    //   if(imagePos < 0) {
+    //     mesh.visible = true;
+    //   }
 
-      if(imagePos < 0) {
-        mesh.visible = true;
-      }
-
-    });
+    // });
 
     this.uniforms.uDirection = this.smoothScroll.scrollDirection;
   }

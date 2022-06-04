@@ -2,18 +2,18 @@ import gsap from 'gsap';
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 
-
 export default class ImageScroll {
   constructor(images) {
     this.images = images;
-    this.currentImage = this.images[0];
-    this.nextImage = this.images[1];
+    this.currentImage = this.images[0].img;
+    this.nextImage = this.images[1].img;
     gsap.registerPlugin(ScrollTrigger);
     this.onReady();
+
   }
 
   onReady() {
-    this.images.forEach((img, i) => {
+    this.images.forEach(({ img, mesh }, i) => {
       const imageBlock = img.parentElement.parentElement.parentElement;
       const spans = imageBlock.querySelectorAll('.image_block__heading span.t span');
       const cover = imageBlock.querySelector('.image_block__cover');
@@ -48,6 +48,7 @@ export default class ImageScroll {
         duration: 0.4,
         onComplete: function() {
           spanTl.play();
+          mesh.visible = true;
         }
       }).to(cover, {
         scaleX: 0,

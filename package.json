@@ -12,6 +12,7 @@
     "gsap": "^3.10.4",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
+    "react-router-dom": "^6.3.0",
     "stats.js": "^0.17.0",
     "three": "^0.139.2"
   },

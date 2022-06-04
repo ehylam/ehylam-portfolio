@@ -71,7 +71,6 @@
     bottom: 30px;
     left: 30px;
 
-
     width: calc(100% - 60px);
     font-size: 18px;
 
@@ -85,6 +84,7 @@
     @media (min-width: 2000px) {
       font-size: 30px;
     }
+
 
     &.visible {
       p {

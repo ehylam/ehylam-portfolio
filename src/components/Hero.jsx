@@ -1,18 +1,20 @@
-import { useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import '../lib/scss/Hero.scss';
 
 const Hero = (props) => {
+  const copyRef = useRef(null);
   const splitText = (text) => {
     return text.split('').map((word, index) => {
       return <span key={index} className="t"><span>{word}</span></span>;
     });
   }
 
+
   function heroHeadingAnimation() {
     const headingTl = gsap.timeline({
       onComplete: () => {
-        document.querySelector('.hero__copy').classList.add('visible');
+        copyRef.current.classList.add('visible');
       }
     });
 
@@ -53,7 +55,7 @@ const Hero = (props) => {
         })}
       </h1>
 
-      <div className="hero__copy">
+      <div ref={copyRef} className="hero__copy">
         <div dangerouslySetInnerHTML={{__html: props.copy}} />
       </div>
     </section>
