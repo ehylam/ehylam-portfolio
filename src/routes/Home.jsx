@@ -4,7 +4,7 @@ import Hero from '../components/Hero';
 import Image from '../components/Image';
 import Footer from '../components/Footer';
 import ImageTransition from '../lib/utils/ImageTransition';
-import { handleTransition } from '../lib/hooks/handleTransition';
+import { pageTransition } from '../lib/hooks/pageTransition';
 
 const Home = (props) => {
   useEffect(() => {
@@ -12,7 +12,7 @@ const Home = (props) => {
   },[]);
 
   useEffect(() => {
-    handleTransition(props);
+    pageTransition(props, 0.25);
   },[props.transitionState])
 
   return (

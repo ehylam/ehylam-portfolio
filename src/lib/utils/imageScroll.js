@@ -1,6 +1,6 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-
+import { staggerTransition } from '../hooks/staggerTransition';
 
 export default class ImageScroll {
   constructor(images) {
@@ -32,14 +32,6 @@ export default class ImageScroll {
         }
       });
 
-      const spanTl = gsap.timeline({ paused: true });
-
-      spanTl.to(spans, {
-        duration: 0.4,
-        y: 0,
-        stagger: 0.015
-      });
-
       imageTl.to(cover, {
         '--g-pos-1': '0%',
         '--g-pos-2': '0%',
@@ -47,7 +39,7 @@ export default class ImageScroll {
         '--g-pos-4': '100%',
         duration: 0.4,
         onComplete: function() {
-          spanTl.play();
+          staggerTransition(spans, 'play');
           mesh.visible = true;
         }
       }).to(cover, {

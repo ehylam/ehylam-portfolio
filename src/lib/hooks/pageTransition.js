@@ -1,6 +1,6 @@
 import gsap from 'gsap';
 
-export const handleTransition = ({transitionState, toggleTransition, toggleLocation}) => {
+export const pageTransition = ({transitionState, toggleTransition, toggleLocation}, delay = 0) => {
   switch (transitionState) {
     case 'enter':
       gsap.to('.page-transition', {
@@ -8,6 +8,7 @@ export const handleTransition = ({transitionState, toggleTransition, toggleLocat
         transformOrigin: 'top',
         duration: 0.9,
         ease: 'power3.inOut',
+        delay: delay,
         onComplete: () => {
 
         }

@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
-import { handleTransition } from '../lib/hooks/handleTransition';
+import { pageTransition } from '../lib/hooks/pageTransition';
 import Hero from '../components/Hero';
 
 const Play = (props) => {
   useEffect(() => {
-    handleTransition(props);
+    pageTransition(props);
   },[props.transitionState])
 
   return (

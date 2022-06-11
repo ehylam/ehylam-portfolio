@@ -3,12 +3,16 @@
   top: 0;
   left: 0;
   width: 100%;
-  padding: 30px;
+  padding: 15px 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   z-index: 50;
   pointer-events: none;
+
+  @media (min-width: 768px) {
+    padding: 30px;
+  }
 
   &__links {
     pointer-events: auto;

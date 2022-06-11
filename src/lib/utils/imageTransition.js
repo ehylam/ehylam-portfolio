@@ -2,8 +2,9 @@
 // import vertexShader from '/shaders/vertexShader.glsl?raw';
 import gsap from 'gsap';
 import * as THREE from 'three';
-import SmoothScroll from './SmoothScroll.js';
-import ImageScroll from './ImageScroll.js';
+import SmoothScroll from './SmoothScroll';
+import ImageScroll from './ImageScroll';
+import { staggerTransition } from '../hooks/staggerTransition';
 import Stats from 'stats.js';
 
 const noise = `
@@ -109,6 +110,7 @@ const fragmentShader = `
   uniform sampler2D uImage;
   uniform vec2 uAspectRatio;
   uniform float uTime;
+  uniform float uOpacity;
   uniform vec2 uCursor;
   varying vec2 vUv;
   uniform float uDirection;
@@ -125,7 +127,7 @@ const fragmentShader = `
     vec4 texture = texture2D(uImage, uv);
     uv.y *= random(vec2(uv.y, uTime));
     texture.rgb += random(uv) * 0.15;
-
+    texture.a = uOpacity;
     gl_FragColor = texture;
 	}
 `;
@@ -168,7 +170,8 @@ constructor(canvas) {
       uImage: {value: 0},
       uTime: {value: 0},
       uHover: {value: 0},
-      uDirection: {value: 0}
+      uDirection: {value: 0},
+      uOpacity: {value: 1}
     };
     this.currentItem = -1;
     this.animating = false;
@@ -260,6 +263,7 @@ constructor(canvas) {
       const mesh = new THREE.Mesh(geometry, material);
 
       // texture.needsUpdate = true;
+      material.transparent = true;
       material.uniforms.uImage.value = texture;
       material.uniforms.uAspectRatio.value.x = 1;
       material.uniforms.uAspectRatio.value.y = bounds.width / bounds.height;
@@ -430,30 +434,54 @@ constructor(canvas) {
 
   toFullscreen(id) {
     if(this.animating) return;
-    gsap.to(this.materials[id].uniforms.uProgress, 1, {
+    const toTimeline = gsap.timeline();
+    const heading = this.imageArr[id].img.parentNode.parentNode.querySelectorAll('.image_block__heading span.t span');
+
+    toTimeline.to(this.materials[id].uniforms.uProgress, 1, {
         value: 1,
         onStart: () => {
           this.animating = true;
           document.body.classList.add('locked');
           this.canvas.style.zIndex = 1;
+
+          this.imageArr.forEach(child => {
+            if(child.id !== id) {
+              const heading = child.img.parentNode.parentNode.querySelectorAll('.image_block__heading span.t span');
+              staggerTransition(heading, 'reverse');
+              gsap.to(child.mesh.material.uniforms.uOpacity, 0.4, {
+                value: 0
+              });
+            }
+          });
         },
         onComplete: () => {
           document.querySelector('.fullscreen').style.zIndex = 2;
-
-
           this.animating = false;
         }
     });
+
+    staggerTransition(heading, 'reverse');
   }
 
   toDefault(id, mesh) {
     if(this.animating) return;
+    const fromTimeline = gsap.timeline();
+    const heading = this.imageArr[id].img.parentNode.parentNode.querySelectorAll('.image_block__heading span.t span');
 
-    gsap.to(this.materials[id].uniforms.uProgress, 1, {
+    fromTimeline.to(this.materials[id].uniforms.uProgress, 1, {
         value: 0,
         onStart: () => {
           this.animating = true;
           document.body.classList.remove('locked');
+          this.imageArr.forEach(child => {
+            if(child.id !== id) {
+              const heading = child.img.parentNode.parentNode.querySelectorAll('.image_block__heading span.t span');
+              staggerTransition(heading, 'play');
+              gsap.to(child.mesh.material.uniforms.uOpacity, 0.4, {
+                value: 1
+              });
+            }
+          });
         },
         onComplete: () => {
           document.querySelector('.fullscreen').style.zIndex = -1;
@@ -462,6 +490,7 @@ constructor(canvas) {
             this.animating = false;
         }
     });
+    staggerTransition(heading, 'play');
   }
 
   getViewSize() {

@@ -3,7 +3,7 @@ footer {
   padding: 15px 30px;
   justify-content: center;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
 
   @media (min-width: 768px) {
     justify-content: space-between;
@@ -15,7 +15,7 @@ footer {
     font-size: 18px;
     line-height: 1.2;
     margin: 0;
-    text-align: right;
+    text-align: center;
     font-family: 'VT323', monospace;
 
     @media (min-width: 768px) {
