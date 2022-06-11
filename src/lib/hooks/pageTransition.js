@@ -1,5 +1,6 @@
 import gsap from 'gsap';
 
+
 export const pageTransition = ({transitionState, toggleTransition, toggleLocation}, delay = 0) => {
   switch (transitionState) {
     case 'enter':
@@ -10,7 +11,7 @@ export const pageTransition = ({transitionState, toggleTransition, toggleLocatio
         ease: 'power3.inOut',
         delay: delay,
         onComplete: () => {
-
+          document.body.style.height = `${document.querySelector('.scroll').getBoundingClientRect().height}px`;
         }
       });
       break;

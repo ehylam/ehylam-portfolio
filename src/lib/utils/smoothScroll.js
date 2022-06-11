@@ -17,7 +17,6 @@ export default class SmoothScroll {
     this.ease = 0.075;
 
     this.eventListeners();
-    requestAnimationFrame(() => this.render());
 
   }
 
@@ -29,19 +28,17 @@ export default class SmoothScroll {
     window.addEventListener('resize', () => {
       document.body.style.height = `${this.scrollable.getBoundingClientRect().height}px`;
     });
-
   }
 
-  smoothScroll() {
+  render() {
     this.scrollTarget = window.scrollY;
     this.previousScroll = this.currentScroll;
     this.currentScroll = lerp(Math.floor(this.currentScroll), this.scrollTarget, this.ease);
     this.scrollable.style.transform = `translate3d(0, ${-this.currentScroll}px, 0)`;
     this.scrollDirection = Math.sign(this.scrollTarget - this.previousScroll);
     this.scrollDelta = this.scrollTarget - this.currentScroll;
+
+    window.requestAnimationFrame(() => this.render());
   }
 
-  render() {
-    this.smoothScroll();
-  }
 }

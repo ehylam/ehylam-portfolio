@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import gsap from 'gsap';
 import Hero from '../components/Hero';
 import Image from '../components/Image';
 import Footer from '../components/Footer';

@@ -183,7 +183,7 @@ constructor(canvas) {
     };
     this.isDown = false;
     this.smoothScroll = new SmoothScroll();
-
+    this.smoothScroll.render();
 
     // Raycaster
     this.raycaster = new THREE.Raycaster();
@@ -520,7 +520,6 @@ constructor(canvas) {
       this.stats.begin();
     }
 
-    this.smoothScroll.render();
     this.updateCameraPosition();
 
     this.elapsedTime = this.clock.getElapsedTime();
