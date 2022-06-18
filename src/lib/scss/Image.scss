@@ -5,10 +5,11 @@
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
-	padding: 5vw;
   z-index: 1;
+  padding: 30px;
 
   @media (min-width: 1024px) {
+    padding: 60px;
     min-height: 100vh;
   }
 
