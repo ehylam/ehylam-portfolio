@@ -40,7 +40,8 @@ const Nav = () => {
     <nav className="nav">
       <div className="nav__links">
         <Link to="/">Home</Link>
-        <Link to="play">Play</Link>
+        <Link to="/play">Play</Link>
+        <Link to="/intro">Intro</Link>
       </div>
       <div className="nav__mode">
         <button className="nav__mode-button" onClick={toggleTheme}>{theme === 'dark' ? '🌑' : '🌕'}</button>

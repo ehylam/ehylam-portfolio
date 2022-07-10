@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Home from '../routes/Home';
 import Play from '../routes/Play';
+import Intro from '../routes/Intro';
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -24,6 +25,7 @@ const AnimatedRoutes = () => {
     <Routes location={currentLocation}>
       <Route path="/" element={<Home transitionState={transitionState} toggleTransition={toggleTransition} toggleLocation={toggleLocation} />} />
       <Route path="play" element={<Play transitionState={transitionState} toggleTransition={toggleTransition} toggleLocation={toggleLocation} />} />
+      <Route path="intro" element={<Intro transitionState={transitionState} toggleTransition={toggleTransition} toggleLocation={toggleLocation} />} />
     </Routes>
    );
 }
