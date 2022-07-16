@@ -58,8 +58,8 @@ const IntroAnimation = ({ title, subtitle }) => {
         <h5 className="intro_animation__arrow-title">{title}</h5>
 
         <div className="intro_animation__links">
-          <Link to="/home"><span>家</span><span>Home</span></Link>
-          <Link to="/play">遊ぶ<span>Play</span></Link>
+          <Link to="/"><span>家</span><span>Home</span></Link>
+          <Link to="/galaxy">銀河系<span>Galaxy</span></Link>
         </div>
 
       </div>

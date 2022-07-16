@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import Home from '../routes/Home';
 import Play from '../routes/Play';
 import Intro from '../routes/Intro';
+import Galaxy from '../routes/Galaxy';
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -26,6 +27,7 @@ const AnimatedRoutes = () => {
       <Route path="/" element={<Home transitionState={transitionState} toggleTransition={toggleTransition} toggleLocation={toggleLocation} />} />
       <Route path="play" element={<Play transitionState={transitionState} toggleTransition={toggleTransition} toggleLocation={toggleLocation} />} />
       <Route path="intro" element={<Intro transitionState={transitionState} toggleTransition={toggleTransition} toggleLocation={toggleLocation} />} />
+      <Route path="galaxy" element={<Galaxy transitionState={transitionState} toggleTransition={toggleTransition} toggleLocation={toggleLocation} />} />
     </Routes>
    );
 }
